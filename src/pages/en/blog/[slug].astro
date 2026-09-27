@@ -1,0 +1,10 @@
+---
+import { publishedEntries } from '../../../lib/content';
+import PostDetail from '../../../components/PostDetail.astro';
+export async function getStaticPaths() {
+  const entries = await publishedEntries('posts');
+  return entries.filter((entry) => entry.data.lang === 'en').map((post) => ({ params: { slug: post.data.slug }, props: { post, hasTranslation: entries.some((other) => other.data.lang === 'zh' && other.data.slug === post.data.slug) } }));
+}
+const { post, hasTranslation } = Astro.props;
+---
+<PostDetail lang="en" post={post} hasTranslation={hasTranslation} />

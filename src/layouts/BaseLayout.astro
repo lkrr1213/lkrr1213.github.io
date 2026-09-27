@@ -1,0 +1,53 @@
+---
+import '../styles/global.css';
+import { absolute, copy, path, site, type Lang, type Section } from '../lib/site';
+interface Props {
+  lang: Lang;
+  section: Section;
+  title: string;
+  description: string;
+  translationPath?: string;
+}
+const { lang, section, title, description, translationPath } = Astro.props;
+const t = copy[lang];
+const canonical = absolute(Astro.url.pathname);
+const currentPath = Astro.url.pathname;
+const zhPath = lang === 'zh' ? currentPath : translationPath;
+const enPath = lang === 'en' ? currentPath : translationPath;
+---
+<!doctype html>
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="canonical" href={canonical} />
+    {zhPath && <link rel="alternate" hreflang="zh-CN" href={absolute(zhPath)} />}
+    {enPath && <link rel="alternate" hreflang="en" href={absolute(enPath)} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.skip}</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href={path(lang, 'home')} aria-label={`${site.name[lang]} · ${t.nav.home}`}>
+          <span class="brand-mark" aria-hidden="true">KL</span><span>{site.name[lang]}</span>
+        </a>
+        <div class="language-switch">
+          {translationPath ? <a href={translationPath} lang={lang === 'zh' ? 'en' : 'zh-CN'}>{t.language} <span aria-hidden="true">↗</span></a> : <span>{t.missingLanguage}</span>}
+        </div>
+        <nav class="primary-nav" aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
+          {(['home', 'projects', 'blog', 'about'] as const).map((item) => <a href={path(lang, item)} aria-current={section === item ? 'page' : undefined}>{t.nav[item]}</a>)}
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="container"><slot /></main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© {new Date().getFullYear()} {site.name[lang]}</span>
+        <div><a href={`mailto:${site.email}`}>{site.email}</a><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub <span class="visually-hidden">(opens in a new tab)</span></a></div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostItem from './PostItem.astro';
+import { posts } from '../lib/content';
+import { copy, path, site, type Lang } from '../lib/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = copy[lang];
+const items = await posts(lang);
+---
+<BaseLayout lang={lang} section="blog" title={`${t.nav.blog} | ${site.name[lang]}`} description={t.blogIntro} translationPath={path(lang === 'zh' ? 'en' : 'zh', 'blog')}>
+  <header class="page-heading"><span class="eyebrow">02 / {lang === 'zh' ? '记录' : 'Notes'}</span><h1>{t.nav.blog}</h1><p>{t.blogIntro}</p></header>
+  {items.length ? <div class="post-list listing-posts">{items.map((post) => <PostItem post={post} lang={lang} />)}</div> : <p class="empty-state">{t.emptyPosts}</p>}
+</BaseLayout>

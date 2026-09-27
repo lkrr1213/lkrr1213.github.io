@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+*.local
+.DS_Store
+Thumbs.db
+verification/
+PERSONAL_SITE_PLAN.md

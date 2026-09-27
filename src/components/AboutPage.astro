@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { copy, path, site, type Lang } from '../lib/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = copy[lang];
+const zh = lang === 'zh';
+const experience = zh ? [
+  { period: '2026.07—2026.09', name: '北京移动设计院', role: '系统开发实习', body: '开发软件审批材料审核工具，处理跨表字段映射、一致性校验与疑点展示。', slug: 'document-review' },
+  { period: '2026.01—2026.06', name: '北京中科金财科技股份有限公司', role: 'Agent 研发实习', body: '参与金融问答 Agent、知识库建设与报告自动化，承担数据处理和工作流优化任务。', slug: 'financial-agent' },
+  { period: '2023.12—2025.09', name: '北京伟开赛德科技发展有限公司', role: '北京工业大学产学研实习', body: '完善智慧教育网站，集成前端人体分割、背景处理和 AI 互动功能。', slug: 'panoramic-education' },
+] : [
+  { period: 'Jul–Sep 2026', name: '北京移动设计院', role: 'Systems development intern', body: 'Developed a software approval review tool for cross-sheet field mapping, consistency checks, and issue displays.', slug: 'document-review' },
+  { period: 'Jan–Jun 2026', name: '北京中科金财科技股份有限公司', role: 'Agent development intern', body: 'Contributed to a financial Q&A Agent, knowledge base, and report automation through data processing and workflow improvements.', slug: 'financial-agent' },
+  { period: 'Dec 2023–Sep 2025', name: '北京伟开赛德科技发展有限公司', role: 'University–industry intern', body: 'Improved an education website with browser-based human segmentation, background processing, and AI interaction.', slug: 'panoramic-education' },
+];
+---
+<BaseLayout lang={lang} section="about" title={`${t.nav.about} | ${site.name[lang]}`} description={t.aboutIntro} translationPath={path(zh ? 'en' : 'zh', 'about')}>
+  <header class="page-heading about-heading"><span class="eyebrow">03 / {zh ? '关于' : 'About'}</span><h1>{t.nav.about}</h1><p>{t.aboutIntro}</p></header>
+  <div class="about-content">
+    <section class="about-section" aria-labelledby="education-title"><h2 id="education-title">{t.education}</h2><div class="about-section-body"><div class="timeline-item"><div class="timeline-date">{zh ? '2023.09—至今' : 'Sep 2023–present'}</div><div><h3>{zh ? '北京工业大学' : 'Beijing University of Technology'}</h3><p>{zh ? '计算机及樊恭烋荣誉学院 · 物联网工程本科' : '计算机及樊恭烋荣誉学院 · Undergraduate in Internet of Things Engineering'}</p></div></div></div></section>
+    <section class="about-section" aria-labelledby="experience-title"><h2 id="experience-title">{t.experience}</h2><div class="about-section-body timeline">{experience.map((item) => <div class="timeline-item"><div class="timeline-date">{item.period}</div><div><h3>{item.name}</h3><p class="timeline-role">{item.role}</p><p>{item.body}</p><a class="text-link" href={path(lang, 'projects', item.slug)}>{t.seeProject} <span aria-hidden="true">→</span></a></div></div>)}</div></section>
+    <section class="about-section" aria-labelledby="skills-title"><h2 id="skills-title">{t.skills}</h2><div class="about-section-body skill-groups"><div><h3>{zh ? '编程与系统' : 'Programming and systems'}</h3><p>C/C++ · Python · Java · SQL · Verilog</p></div><div><h3>{zh ? '应用与数据' : 'Applications and data'}</h3><p>{zh ? 'Agent · 数据处理 · React · PyQt5 · AI 开发工具' : 'Agent workflows · Data processing · React · PyQt5 · AI development tools'}</p></div></div></section>
+    <section class="about-section" aria-labelledby="community-title"><h2 id="community-title">{t.community}</h2><div class="about-section-body timeline"><div class="timeline-item"><div class="timeline-date">{zh ? '2025.03—2025.12' : 'Mar–Dec 2025'}</div><div><h3>{zh ? '北京工业大学零刻软研社 · 副社长' : 'Vice president · 北京工业大学零刻软研社'}</h3><p>{zh ? '负责社团日常运营、技术学习体系建设与团队管理。' : 'Responsible for day-to-day operations, the technical learning structure, and team management.'}</p></div></div><div class="timeline-item"><div class="timeline-date">{zh ? '2025.07—2025.08' : 'Jul–Aug 2025'}</div><div><h3>{zh ? '牛津、剑桥暑期科研课程' : 'Oxford and Cambridge summer research courses'}</h3><p>{zh ? '团队主题为 Using AI-Native Systems to Address Poverty。我参与道路视频监控系统管理网站，获得优秀项目毕业成员。' : 'Our team worked on “Using AI-Native Systems to Address Poverty.” I contributed to a road video monitoring system management website and received an outstanding project graduate member recognition.'}</p></div></div></div></section>
+    <section class="about-section" aria-labelledby="about-contact-title"><h2 id="about-contact-title">{t.contact}</h2><div class="about-section-body"><p>{t.contactText}</p><div class="about-contact-links"><a href={`mailto:${site.email}`}>{site.email} <span aria-hidden="true">↗</span></a><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></div></div></section>
+  </div>
+</BaseLayout>

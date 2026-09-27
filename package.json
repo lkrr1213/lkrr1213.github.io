@@ -1,0 +1,20 @@
+{
+  "name": "kunrong-personal-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "node scripts/validate-content.mjs && astro check",
+    "build": "node scripts/validate-content.mjs && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "7.3.5",
+    "@astrojs/sitemap": "^3.7.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "typescript": "^5.9.3"
+  }
+}

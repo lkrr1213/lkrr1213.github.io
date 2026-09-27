@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { render } from 'astro:content';
+import type { Project } from '../lib/content';
+import { copy, path, site, type Lang } from '../lib/site';
+interface Props { lang: Lang; project: Project; hasTranslation: boolean }
+const { lang, project, hasTranslation } = Astro.props;
+const t = copy[lang];
+const { Content } = await render(project);
+const translationPath = hasTranslation ? path(lang === 'zh' ? 'en' : 'zh', 'projects', project.data.slug) : undefined;
+---
+<BaseLayout lang={lang} section="projects" title={`${project.data.title} | ${site.name[lang]}`} description={project.data.summary} translationPath={translationPath}>
+  <article class="detail-page">
+    <a class="back-link" href={path(lang, 'projects')}><span aria-hidden="true">←</span> {t.backProjects}</a>
+    <header class="detail-header"><span class="eyebrow">{lang === 'zh' ? '项目' : 'Project'} / 0{project.data.order}</span><h1>{project.data.title}</h1><p class="detail-summary">{project.data.summary}</p><div class="detail-meta"><span>{project.data.period}</span><span>{project.data.role}</span></div><ul class="tag-list">{project.data.tags.map((tag) => <li>{tag}</li>)}</ul></header>
+    <div class="prose"><Content /></div>
+  </article>
+</BaseLayout>

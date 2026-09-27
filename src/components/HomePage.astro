@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from './ProjectCard.astro';
+import PostItem from './PostItem.astro';
+import { projects, posts } from '../lib/content';
+import { copy, path, site, type Lang } from '../lib/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = copy[lang];
+const featured = (await projects(lang)).filter((entry) => entry.data.featured);
+const recent = (await posts(lang)).slice(0, 3);
+---
+<BaseLayout lang={lang} section="home" title={site.title[lang]} description={t.heroBody} translationPath={path(lang === 'zh' ? 'en' : 'zh', 'home')}>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-kicker"><span class="status-dot"></span>{lang === 'zh' ? '个人主页 · 项目与写作' : 'Personal site · Projects and writing'}</div>
+    <h1 id="hero-title">{t.heroTitle}</h1>
+    <p>{t.heroBody}</p>
+    <div class="hero-actions"><a class="button button-primary" href={path(lang, 'projects')}>{t.viewProjects} <span aria-hidden="true">↗</span></a><a class="button button-secondary" href={path(lang, 'about')}>{t.aboutMe} <span aria-hidden="true">→</span></a></div>
+  </section>
+  <section class="section" aria-labelledby="featured-title">
+    <div class="section-heading"><div><span class="eyebrow">01 / {lang === 'zh' ? '实践' : 'Work'}</span><h2 id="featured-title">{t.featured}</h2></div><a class="section-link" href={path(lang, 'projects')}>{t.allProjects} <span aria-hidden="true">→</span></a></div>
+    <div class="project-grid">{featured.map((project) => <ProjectCard project={project} lang={lang} />)}</div>
+  </section>
+  <section class="section writing-section" aria-labelledby="recent-title">
+    <div class="section-heading"><div><span class="eyebrow">02 / {lang === 'zh' ? '记录' : 'Notes'}</span><h2 id="recent-title">{t.recent}</h2></div><a class="section-link" href={path(lang, 'blog')}>{t.allPosts} <span aria-hidden="true">→</span></a></div>
+    {recent.length ? <div class="post-list">{recent.map((post) => <PostItem post={post} lang={lang} />)}</div> : <p class="empty-state">{t.emptyPosts}</p>}
+  </section>
+  <section class="contact-band" aria-labelledby="contact-title"><div><span class="eyebrow">03 / {t.contact}</span><h2 id="contact-title">{t.contact}</h2><p>{t.contactText}</p></div><div class="contact-links"><a href={`mailto:${site.email}`}>{site.email} <span aria-hidden="true">↗</span></a><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></div></section>
+</BaseLayout>

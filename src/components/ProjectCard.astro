@@ -1,0 +1,14 @@
+---
+import type { Project } from '../lib/content';
+import { copy, path, type Lang } from '../lib/site';
+interface Props { project: Project; lang: Lang }
+const { project, lang } = Astro.props;
+---
+<article class="project-card">
+  <div class="card-top"><span class="eyebrow">{project.data.period}</span><span class="card-index">0{project.data.order}</span></div>
+  <h3><a class="card-link" href={path(lang, 'projects', project.data.slug)}>{project.data.title}<span aria-hidden="true">↗</span></a></h3>
+  <p>{project.data.summary}</p>
+  <p class="card-role">{project.data.role}</p>
+  <ul class="tag-list" aria-label={lang === 'zh' ? '技术关键词' : 'Technologies'}>{project.data.tags.map((tag) => <li>{tag}</li>)}</ul>
+  <a class="text-link" href={path(lang, 'projects', project.data.slug)}>{copy[lang].readProject} <span aria-hidden="true">→</span></a>
+</article>

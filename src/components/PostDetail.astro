@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { render } from 'astro:content';
+import type { Post } from '../lib/content';
+import { copy, path, site, type Lang } from '../lib/site';
+interface Props { lang: Lang; post: Post; hasTranslation: boolean }
+const { lang, post, hasTranslation } = Astro.props;
+const t = copy[lang];
+const { Content } = await render(post);
+const translationPath = hasTranslation ? path(lang === 'zh' ? 'en' : 'zh', 'blog', post.data.slug) : undefined;
+---
+<BaseLayout lang={lang} section="blog" title={`${post.data.title} | ${site.name[lang]}`} description={post.data.summary} translationPath={translationPath}>
+  <article class="detail-page article-page">
+    <a class="back-link" href={path(lang, 'blog')}><span aria-hidden="true">←</span> {t.backPosts}</a>
+    <header class="detail-header"><span class="eyebrow">{lang === 'zh' ? '文章' : 'Writing'} / <time datetime={post.data.publishedAt}>{post.data.publishedAt}</time></span><h1>{post.data.title}</h1><p class="detail-summary">{post.data.summary}</p><ul class="tag-list">{post.data.tags.map((tag) => <li>{tag}</li>)}</ul></header>
+    <div class="prose"><Content /></div>
+    <a class="back-link bottom-back" href={path(lang, 'blog')}><span aria-hidden="true">←</span> {t.backPosts}</a>
+  </article>
+</BaseLayout>

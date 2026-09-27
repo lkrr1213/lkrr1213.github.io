@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from './ProjectCard.astro';
+import { projects } from '../lib/content';
+import { copy, path, site, type Lang } from '../lib/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = copy[lang];
+const items = await projects(lang);
+---
+<BaseLayout lang={lang} section="projects" title={`${t.nav.projects} | ${site.name[lang]}`} description={t.projectsIntro} translationPath={path(lang === 'zh' ? 'en' : 'zh', 'projects')}>
+  <header class="page-heading"><span class="eyebrow">01 / {lang === 'zh' ? '实践' : 'Work'}</span><h1>{t.nav.projects}</h1><p>{t.projectsIntro}</p></header>
+  <div class="project-grid listing-grid">{items.map((project) => <ProjectCard project={project} lang={lang} />)}</div>
+</BaseLayout>

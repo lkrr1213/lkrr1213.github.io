@@ -1,0 +1,5 @@
+---
+import '../styles/global.css';
+import { copy, path, site } from '../lib/site';
+---
+<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex" /><title>404 | {site.name.zh}</title><link rel="icon" href="/favicon.svg" /></head><body><main class="not-found container"><span class="eyebrow">404 / PAGE NOT FOUND</span><h1>{copy.zh.notFound}</h1><p>{copy.zh.notFoundText}</p><p>Page not found. There is no page at this address.</p><div class="hero-actions"><a class="button button-primary" href={path('zh', 'home')}>{copy.zh.backHome}</a><a class="button button-secondary" href={path('en', 'home')}>{copy.en.backHome}</a></div></main></body></html>

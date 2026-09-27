@@ -1,0 +1,10 @@
+---
+import { publishedEntries } from '../../../lib/content';
+import ProjectDetail from '../../../components/ProjectDetail.astro';
+export async function getStaticPaths() {
+  const entries = await publishedEntries('projects');
+  return entries.filter((entry) => entry.data.lang === 'en').map((project) => ({ params: { slug: project.data.slug }, props: { project, hasTranslation: entries.some((other) => other.data.lang === 'zh' && other.data.slug === project.data.slug) } }));
+}
+const { project, hasTranslation } = Astro.props;
+---
+<ProjectDetail lang="en" project={project} hasTranslation={hasTranslation} />
